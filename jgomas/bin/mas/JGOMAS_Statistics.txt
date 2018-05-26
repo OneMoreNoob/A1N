@@ -1,26 +1,26 @@
 Winner Team: ALLIED
-Duration: [4m:22s]
+Duration: [4m:16s]
 
 Statistics for ALLIED TEAM
 	-GENERAL:
-		* Alive:       	5
-		* Avrg. Health:	58.0
+		* Alive:       	2
+		* Avrg. Health:	50.0
 
 	-OBJECTIVE:
 		* Times Taken: 	1
 		* Times Lost:  	0
 
 	-SHOTS:
-		* EnemyHit:    	0
-		* TeamHit:     	357
-		* FailedHit:   	144
-		* TOTAL:       	501
+		* EnemyHit:    	1
+		* TeamHit:     	456
+		* FailedHit:   	114
+		* TOTAL:       	571
 
 	-MEDIC PACKS:
-		* Delivered:   	20
-		* Team Taken:  	12
-		* Enemy Taken: 	0
-		* Not Taken:   	8
+		* Delivered:   	22
+		* Team Taken:  	14
+		* Enemy Taken: 	3
+		* Not Taken:   	5
 
 	-AMMO PACKS:
 		* Delivered:   	0
@@ -29,35 +29,35 @@ Statistics for ALLIED TEAM
 		* Not Taken:   	0
 
 	-EFICIENCY:
-		* Medic:       	0.6
+		* Medic:       	0.7727272727272727
 		* FieldOps:    	0.0
-		* Army:        	0.9840319361277445
+		* Army:        	0.9877408056042032
 
 	-ANTI-EFICIENCY:
-		* Medic:       	0.0
+		* Medic:       	0.13636363636363635
 		* FieldOps:    	0.0
-		* Army:        	0.014005602240896359
+		* Army:        	0.0043859649122807015
 
 
 Statistics for AXIS TEAM
 	-GENERAL:
-		* Alive:       	8
-		* Avrg. Health:	100.0
+		* Alive:       	7
+		* Avrg. Health:	57.42857
 
 	-OBJECTIVE:
 		* Times Taken: 	0
 		* Times Lost:  	1
 
 	-SHOTS:
-		* EnemyHit:    	0
-		* TeamHit:     	0
-		* FailedHit:   	0
-		* TOTAL:       	0
+		* EnemyHit:    	84
+		* TeamHit:     	247
+		* FailedHit:   	369
+		* TOTAL:       	700
 
 	-MEDIC PACKS:
-		* Delivered:   	0
-		* Team Taken:  	0
-		* Enemy Taken: 	0
+		* Delivered:   	4
+		* Team Taken:  	3
+		* Enemy Taken: 	1
 		* Not Taken:   	0
 
 	-AMMO PACKS:
@@ -67,13 +67,13 @@ Statistics for AXIS TEAM
 		* Not Taken:   	0
 
 	-EFICIENCY:
-		* Medic:       	0.0
+		* Medic:       	1.0
 		* FieldOps:    	0.0
-		* Army:        	0.0
+		* Army:        	0.9971428571428571
 
 	-ANTI-EFICIENCY:
-		* Medic:       	0.0
+		* Medic:       	0.25
 		* FieldOps:    	0.0
-		* Army:        	0.0
+		* Army:        	0.02834008097165992
 
 

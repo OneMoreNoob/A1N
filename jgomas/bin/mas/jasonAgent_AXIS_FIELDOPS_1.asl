@@ -202,10 +202,23 @@ patrollingRadius(64).
  * <em> It's very useful to overload this plan. </em>
  *
  */
-+!update_targets 
-	<-	?debug(Mode); if (Mode<=1) { .println("YOUR CODE FOR UPDATE_TARGETS GOES HERE.") }.
-	
-	
++!update_targets
+	<- ?debug(Mode); if (Mode<=1) { .println("YOUR CODE FOR update_targets GOES HERE.")};
+        .my_name(ME);
+        ?mi_pos(X, Y, Z);
+        !safe_pos(X+1, Y, Z);
+        ?safe_pos(X1, Y1, Z1);
+        ?estoyformado(B);
+        if((B == true) & lugar(0)) {
+            !add_task(task(3000, "TASK_GOTO_POSITION1", ME, pos(X1, Y1, Z1), "INT"));
+            -+lugar(1);
+        }
+            else{
+                if((B == true) & lugar(1)){
+                    !add_task(task(3000, "TASK_GOTO_POSITION2", ME, pos(X1-1, Y1, Z1), "INT"));
+                    -+lugar(0);
+            }
+        }.
 /////////////////////////////////
 //  CHECK MEDIC ACTION (ONLY MEDICS)
 /////////////////////////////////
@@ -316,6 +329,7 @@ patrollingRadius(64).
 	.println("RECIBIDO MENSAJE DE ",A);
 	!safe_pos(X,Y,Z);
 	?safe_pos(X1,Y1,Z1);
+    +mi_pos(X1, Y1, Z1);
     !add_task(task(5000,"TASK_GOTO_POSITION",A,pos(X1,Y1,Z1),"INT"));
 	?tasks(TASKS);
 	.println(TASKS);
@@ -323,7 +337,7 @@ patrollingRadius(64).
 			//-+estoyformado(true);
 			//.concat("formado(true)")",Listo);
 			//.send_msg_with_conversation_id(Capitan,tell,Listo,"INT");
-			
+	-+estoyformado(true);		
     -+state(standing).
 
 /////////////////////////////////
@@ -332,6 +346,7 @@ patrollingRadius(64).
 
 +!init
    <- ?debug(Mode); if (Mode<=1) { .println("YOUR CODE FOR init GOES HERE.")};  
-	.register("JGOMAS","fieldops_1_AXIS");
 	+estoyformado(false);
-   -+tasks([]).
+	.wait(2000);
+	+lugar(0);
+    -+tasks([]).

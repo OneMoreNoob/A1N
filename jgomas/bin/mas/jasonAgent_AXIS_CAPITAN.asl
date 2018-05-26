@@ -1,4 +1,4 @@
-debug(3).
+debug(1).
 
 // Name of the manager
 manager("Manager").
@@ -38,58 +38,58 @@ patrollingRadius(64).
  * enemy found. Otherwise, the return value is aimed("false")
  *
  * <em> It's very useful to overload this plan. </em>
- * 
+ *
  */
 +!get_agent_to_aim
     <-  ?debug(Mode); if (Mode<=2) { .println("Looking for agents to aim."); }
         ?fovObjects(FOVObjects);
         .length(FOVObjects, Length);
-        
+
         ?debug(Mode); if (Mode<=1) { .println("El numero de objetos es:", Length); }
-        
+
         if (Length > 0) {
-		    +bucle(0);
-    
+            +bucle(0);
+
             -+aimed("false");
-    
+
             while (aimed("false") & bucle(X) & (X < Length)) {
-  
+
                 //.println("En el bucle, y X vale:", X);
-                
+
                 .nth(X, FOVObjects, Object);
-                // Object structure 
+                // Object structure
                 // [#, TEAM, TYPE, ANGLE, DISTANCE, HEALTH, POSITION ]
                 .nth(2, Object, Type);
-                
+
                 ?debug(Mode); if (Mode<=2) { .println("Objeto Analizado: ", Object); }
-                
+
                 if (Type > 1000) {
                     ?debug(Mode); if (Mode<=2) { .println("I found some object."); }
                 } else {
                     // Object may be an enemy
                     .nth(1, Object, Team);
                     ?my_formattedTeam(MyTeam);
-          
+
                     if (Team == 100) {  // Only if I'm AXIS
-				
- 					    ?debug(Mode); if (Mode<=2) { .println("Aiming an enemy. . .", MyTeam, " ", .number(MyTeam) , " ", Team, " ", .number(Team)); }
-					    +aimed_agent(Object);
+
+                        ?debug(Mode); if (Mode<=2) { .println("Aiming an enemy. . .", MyTeam, " ", .number(MyTeam) , " ", Team, " ", .number(Team)); }
+                        +aimed_agent(Object);
                         -+aimed("true");
 
                     }
-                    
+
                 }
-             
+
                 -+bucle(X+1);
-                
+
             }
-                     
-       
+
+
         }
 
      -bucle(_).
 
-        
+
 
 /////////////////////////////////
 //  LOOK RESPONSE
@@ -99,13 +99,13 @@ patrollingRadius(64).
         .length(FOVObjects, Length);
         if (Length > 0) {
             ///?debug(Mode); if (Mode<=1) { .println("HAY ", Length, " OBJETOS A MI ALREDEDOR:\n", FOVObjects); }
-        };    
+        };
         -look_response(_)[source(M)];
         -+fovObjects(FOVObjects);
         //.//;
         !look.
-      
-        
+
+
 /////////////////////////////////
 //  PERFORM ACTIONS
 /////////////////////////////////
@@ -117,7 +117,7 @@ patrollingRadius(64).
  * is aiming.
  *
  *  It's very useful to overload this plan.
- * 
+ *
  */
 
 +!perform_aim_action
@@ -131,13 +131,13 @@ patrollingRadius(64).
 
 
         if (AimedAgentTeam == 100) {
-        
+
             .nth(6, AimedAgent, NewDestination);
             ?debug(Mode); if (Mode<=1) { .println("NUEVO DESTINO MARCADO: ", NewDestination); }
             //update_destination(NewDestination);
         }
         .
-    
+
 /**
  * Action to do when the agent is looking at.
  *
@@ -188,7 +188,7 @@ patrollingRadius(64).
         +task_priority("TASK_RUN_AWAY", 1500);
         +task_priority("TASK_GOTO_POSITION", 750);
         +task_priority("TASK_PATROLLING", 500);
-        +task_priority("TASK_WALKING_PATH", 750).   
+        +task_priority("TASK_WALKING_PATH", 750).
 
 
 
@@ -204,18 +204,30 @@ patrollingRadius(64).
  * <em> It's very useful to overload this plan. </em>
  *
  */
-+!update_targets 
-	<-	?debug(Mode); if (Mode<=1) { .println("YOUR CODE FOR UPDATE_TARGETS GOES HERE.") };
-	    ?numformados(n);
-	    ?boolformado(b);
-		?plan(p);
-		if(p==1){
-		 !formar2("medic_1_AXIS","fieldops_1_AXIS");
-		}
-		-+boolformado(true);
-		.
-	
-	
++!update_targets
+	<- ?debug(Mode); if (Mode<=1) { .println("YOUR CODE FOR update_targets GOES HERE.")};
+        //?numformados(N);
+        //?boolformado(B);
+        //?plan(P);
+        //if(P==1){
+        //!formar2("medic_1_AXIS","fieldops_1_AXIS");
+        //}
+        //-+boolformado(true);
+        .my_name(ME);
+        ?mi_pos(X, Y, Z);
+        !safe_pos(X+1, Y, Z);
+        ?safe_pos(X1, Y1, Z1);
+        ?estoyformado(B);
+        if((B == true) & lugar(0)) {
+            !add_task(task(3000, "TASK_GOTO_POSITION1", ME, pos(X1, Y1, Z1), "INT"));
+            -+lugar(1);
+        }
+            else{
+                if((B == true) & lugar(1)){
+                    !add_task(task(3000, "TASK_GOTO_POSITION2", ME, pos(X1-1, Y1, Z1), "INT"));
+                    -+lugar(0);
+            }
+        }.
 /////////////////////////////////
 //  CHECK MEDIC ACTION (ONLY MEDICS)
 /////////////////////////////////
@@ -262,29 +274,29 @@ patrollingRadius(64).
  */
 +!performThresholdAction
        <-
-       
+
        ?debug(Mode); if (Mode<=1) { .println("YOUR CODE FOR PERFORM_TRESHOLD_ACTION GOES HERE.") }
-       
+
        ?my_ammo_threshold(At);
        ?my_ammo(Ar);
-       
-       if (Ar <= At) { 
+
+       if (Ar <= At) {
           ?my_position(X, Y, Z);
-          
+
          .my_team("fieldops_AXIS", E1);
          //.println("Mi equipo intendencia: ", E1 );
          .concat("cfa(",X, ", ", Y, ", ", Z, ", ", Ar, ")", Content1);
          .send_msg_with_conversation_id(E1, tell, Content1, "CFA");
-       
-       
+
+
        }
-       
+
        ?my_health_threshold(Ht);
        ?my_health(Hr);
-       
-       if (Hr <= Ht) {  
+
+       if (Hr <= Ht) {
           ?my_position(X, Y, Z);
-          
+
          .my_team("medic_AXIS", E2);
          //.println("Mi equipo medico: ", E2 );
          .concat("cfm(",X, ", ", Y, ", ", Z, ", ", Hr, ")", Content2);
@@ -292,106 +304,114 @@ patrollingRadius(64).
 
        }
        .
-       
+
 /////////////////////////////////
 //  ANSWER_ACTION_CFM_OR_CFA
 /////////////////////////////////
 
-   
-    
+
+
 +cfm_agree[source(M)]
    <- ?debug(Mode); if (Mode<=1) { .println("YOUR CODE FOR cfm_agree GOES HERE.")};
-      -cfm_agree.  
+      -cfm_agree.
 
 +cfa_agree[source(M)]
    <- ?debug(Mode); if (Mode<=1) { .println("YOUR CODE FOR cfa_agree GOES HERE.")};
-      -cfa_agree.  
+      -cfa_agree.
 
 +cfm_refuse[source(M)]
    <- ?debug(Mode); if (Mode<=1) { .println("YOUR CODE FOR cfm_refuse GOES HERE.")};
-      -cfm_refuse.  
+      -cfm_refuse.
 
 +cfa_refuse[source(M)]
    <- ?debug(Mode); if (Mode<=1) { .println("YOUR CODE FOR cfa_refuse GOES HERE.")};
-      -cfa_refuse.  
-	  
+      -cfa_refuse.
+
 /////////////////////////////////
 //  EXTRA
 /////////////////////////////////
 
-+formado(F)[source(A)] 
++formado(F)[source(A)]
 <-
-	.println("Mensaje recibido de agente listo ", A);
+    .println("Mensaje recibido de agente listo ", A);
     ?numformados(N);
     -+numformados(N+1);
     -formado(_).
-	
-+!formar1(Medico,Fieldop) 
-<- 
-	?objective(ObjectiveX,ObjectiveY,ObjectiveZ);
-	.my_team(Fieldop,Fieldops);
-	.my_team(Medico,Medicos);
-	
-	.nth(0,Medicos,Medic1);
-	.nth(1,Medicos,Medic2);
-	.nth(2,Medicos,Medic3);
-	.nth(3,Medicos,Medic4);
-	
-	.concat("formar1(",ObjectiveX+10,",",ObjectiveY,",",ObjectiveZ,")",PosMedico1);
-	.concat("formar1(",ObjectiveX+10,",",ObjectiveY,",",ObjectiveZ+2,")",PosMedico2);
-	.concat("formar1(",ObjectiveX-10,",",ObjectiveY,",",ObjectiveZ+1,")",PosMedico3);
-	.concat("formar1(",ObjectiveX-10,",",ObjectiveY,",",ObjectiveZ-1,")",PosMedico4);
-	.send_msg_with_conversation_id(Medic1,tell,PosMedico1,"INT");
-	.send_msg_with_conversation_id(Medic2,tell,PosMedico2,"INT");
-	.send_msg_with_conversation_id(Medic3,tell,PosMedico3,"INT");
-	.send_msg_with_conversation_id(Medic4,tell,PosMedico4,"INT");
-	
-	.nth(0,Fieldops,Ops1);
-	.nth(1,Fieldops,Ops2);
-	.nth(2,Fieldops,Ops3);
-	
-	.concat("formar1(",ObjectiveX+10,",",ObjectiveY,",",ObjectiveZ-2,")",PosOps1);
-	.concat("formar1(",ObjectiveX+10,",",ObjectiveY,",",ObjectiveZ+4,")",PosOps2);
-	.concat("formar1(",ObjectiveX-10,",",ObjectiveY,",",ObjectiveZ,")",PosOps3);
-	.send_msg_with_conversation_id(Ops1,tell,PosOps1,"INT");
-	.send_msg_with_conversation_id(Ops2,tell,PosOps2,"INT");
-	.send_msg_with_conversation_id(Ops3,tell,PosOps3,"INT");
-	
-	.println("Enviados Mensajes de formacion.").
-	
-+!formar2(Medico,Fieldop) 
-<- 
-	?objective(ObjectiveX,ObjectiveY,ObjectiveZ);
-	.my_team(Fieldop,Fieldops);
-	.my_team(Medico,Medicos);
-	
-	.nth(0,Medicos,Medic1);
-	.nth(1,Medicos,Medic2);
-	.nth(2,Medicos,Medic3);
-	.nth(3,Medicos,Medic4);
-	
-	.concat("formar2(",ObjectiveX+10,",",ObjectiveY,",",ObjectiveZ,")",PosMedico1);
-	.concat("formar2(",ObjectiveX+10,",",ObjectiveY,",",ObjectiveZ+2,")",PosMedico2);
-	.concat("formar2(",ObjectiveX-10,",",ObjectiveY,",",ObjectiveZ+1,")",PosMedico3);
-	.concat("formar2(",ObjectiveX-10,",",ObjectiveY,",",ObjectiveZ-1,")",PosMedico4);
-	.send_msg_with_conversation_id(Medic1,tell,PosMedico1,"INT");
-	.send_msg_with_conversation_id(Medic2,tell,PosMedico2,"INT");
-	.send_msg_with_conversation_id(Medic3,tell,PosMedico3,"INT");
-	.send_msg_with_conversation_id(Medic4,tell,PosMedico4,"INT");
-	
-	.nth(0,Fieldops,Ops1);
-	.nth(1,Fieldops,Ops2);
-	.nth(2,Fieldops,Ops3);
-	
-	.concat("formar2(",ObjectiveX+10,",",ObjectiveY,",",ObjectiveZ-2,")",PosOps1);
-	.concat("formar2(",ObjectiveX+10,",",ObjectiveY,",",ObjectiveZ+4,")",PosOps2);
-	.concat("formar2(",ObjectiveX-10,",",ObjectiveY,",",ObjectiveZ,")",PosOps3);
-	.send_msg_with_conversation_id(Ops1,tell,PosOps1,"INT");
-	.send_msg_with_conversation_id(Ops2,tell,PosOps2,"INT");
-	.send_msg_with_conversation_id(Ops3,tell,PosOps3,"INT");
-	
-	.println("Formacion completa.").
-	
+
++!formar1(Medico,Fieldop)
+<-
+    ?objective(ObjectiveX,ObjectiveY,ObjectiveZ);
+    .my_team(Fieldop,Fieldops);
+    .my_team(Medico,Medicos);
+
+    .nth(0,Medicos,Medic1);
+    .nth(1,Medicos,Medic2);
+    .nth(2,Medicos,Medic3);
+    .nth(3,Medicos,Medic4);
+
+    .concat("formar1(",ObjectiveX-13,",",ObjectiveY,",",ObjectiveZ-6,")",PosMedico1);
+    .concat("formar1(",ObjectiveX-5,",",ObjectiveY,",",ObjectiveZ-17,")",PosMedico2);
+    .concat("formar1(",ObjectiveX-14,",",ObjectiveY,",",ObjectiveZ-11,")",PosMedico3);
+    .concat("formar1(",ObjectiveX-5,",",ObjectiveY,",",ObjectiveZ-15,")",PosMedico4);
+    .send_msg_with_conversation_id(Medic1,tell,PosMedico1,"INT");
+    .send_msg_with_conversation_id(Medic2,tell,PosMedico2,"INT");
+    .send_msg_with_conversation_id(Medic3,tell,PosMedico3,"INT");
+    .send_msg_with_conversation_id(Medic4,tell,PosMedico4,"INT");
+
+    .nth(0,Fieldops,Ops1);
+    .nth(1,Fieldops,Ops2);
+    .nth(2,Fieldops,Ops3);
+
+    .concat("formar1(",ObjectiveX-21,",",ObjectiveY,",",ObjectiveZ-6,")",PosOps1);
+    .concat("formar1(",ObjectiveX-5,",",ObjectiveY,",",ObjectiveZ-19,")",PosOps2);
+    .concat("formar1(",ObjectiveX-13,",",ObjectiveY,",",ObjectiveZ-11,")",PosOps3);
+    .send_msg_with_conversation_id(Ops1,tell,PosOps1,"INT");
+    .send_msg_with_conversation_id(Ops2,tell,PosOps2,"INT");
+    .send_msg_with_conversation_id(Ops3,tell,PosOps3,"INT");
+
+    .println("Enviados Mensajes de formacion.");
+
+    .my_name(ME);
+    !safe_pos(ObjectiveX,ObjectiveY,ObjectiveZ-6);
+    ?safe_pos(X1,Y1,Z1);
+    +mi_pos(X1, Y1, Z1);
+    !add_task(task(5000,"TASK_GOTO_POSITION",ME,pos(X1,Y1,Z1),"INT"));
+    -+estoyformado(true);
+    .
+
++!formar2(Medico,Fieldop)
+<-
+    ?objective(ObjectiveX,ObjectiveY,ObjectiveZ);
+    .my_team(Fieldop,Fieldops);
+    .my_team(Medico,Medicos);
+
+    .nth(0,Medicos,Medic1);
+    .nth(1,Medicos,Medic2);
+    .nth(2,Medicos,Medic3);
+    .nth(3,Medicos,Medic4);
+
+    .concat("formar2(",ObjectiveX+10,",",ObjectiveY,",",ObjectiveZ,")",PosMedico1);
+    .concat("formar2(",ObjectiveX+10,",",ObjectiveY,",",ObjectiveZ+2,")",PosMedico2);
+    .concat("formar2(",ObjectiveX-10,",",ObjectiveY,",",ObjectiveZ+1,")",PosMedico3);
+    .concat("formar2(",ObjectiveX-10,",",ObjectiveY,",",ObjectiveZ-1,")",PosMedico4);
+    .send_msg_with_conversation_id(Medic1,tell,PosMedico1,"INT");
+    .send_msg_with_conversation_id(Medic2,tell,PosMedico2,"INT");
+    .send_msg_with_conversation_id(Medic3,tell,PosMedico3,"INT");
+    .send_msg_with_conversation_id(Medic4,tell,PosMedico4,"INT");
+
+    .nth(0,Fieldops,Ops1);
+    .nth(1,Fieldops,Ops2);
+    .nth(2,Fieldops,Ops3);
+
+    .concat("formar2(",ObjectiveX+10,",",ObjectiveY,",",ObjectiveZ-2,")",PosOps1);
+    .concat("formar2(",ObjectiveX+10,",",ObjectiveY,",",ObjectiveZ+4,")",PosOps2);
+    .concat("formar2(",ObjectiveX-10,",",ObjectiveY,",",ObjectiveZ,")",PosOps3);
+    .send_msg_with_conversation_id(Ops1,tell,PosOps1,"INT");
+    .send_msg_with_conversation_id(Ops2,tell,PosOps2,"INT");
+    .send_msg_with_conversation_id(Ops3,tell,PosOps3,"INT");
+
+    .println("Formacion completa.").
+
 
 
 /////////////////////////////////
@@ -405,11 +425,8 @@ patrollingRadius(64).
    -+tasks([]);
    +numformados(0);
    +boolformado(false);
+   +estoyformado(false);
    +plan(0);
-   ?objective(ObjectiveX,ObjectiveY,ObjectiveZ);
-   .my_name(ME);
-   !safe_pos(ObjectiveX,ObjectiveY,ObjectiveZ);
-   ?safe_pos(X1,Y1,Z1);
-   !add_task(task(5000,"TASK_GOTO_POSITION",ME,pos(X1,Y1,Z1),"INT"));
-   !formar1("medic_1_AXIS","fieldops_1_AXIS").
+   +lugar(0);
+   !formar1("medic_AXIS","fieldops_AXIS").
 
