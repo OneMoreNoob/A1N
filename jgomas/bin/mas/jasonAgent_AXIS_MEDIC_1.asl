@@ -204,18 +204,34 @@ patrollingRadius(64).
 +!update_targets
 	<- ?debug(Mode); if (Mode<=1) { .println("YOUR CODE FOR update_targets GOES HERE.")};
         .my_name(ME);
-        ?mi_pos(X,Y,Z);
-        !safe_pos(X+1,Y,Z);
-        ?safe_pos(X1,Y1,Z1);
+        ?mi_pos(X, Y, Z);
+        !safe_pos(X, Y, Z);
+        ?safe_pos(X1, Y1, Z1);
         ?estoyformado(B);
-        if((B == true) & lugar(0)) {
-            !add_task(task(3000,"TASK_GOTO_POSITION1",ME,pos(X1,Y1,Z1),"INT"));
-            -+lugar(1);
-        }
+        
+        if(who(1)){
+            if((B == true) & lugar(0)) {
+                !add_task(task(3000, "TASK_GOTO_POSITION1", ME, pos(X1, Y1, Z1+1), "INT"));
+                -+lugar(1);
+            }
             else{
                 if((B == true) & lugar(1)){
-                    !add_task(task(3000,"TASK_GOTO_POSITION2",ME,pos(X1-1,Y1,Z1),"INT"));
+                    !add_task(task(3000, "TASK_GOTO_POSITION2", ME, pos(X1, Y1, Z1-1), "INT"));
                     -+lugar(0);
+                }
+            }
+        }
+        
+        if(who(2)){
+            if((B == true) & lugar(0)) {
+                !add_task(task(3000, "TASK_GOTO_POSITION1", ME, pos(X1+1, Y1, Z1), "INT"));
+                -+lugar(1);
+            }
+            else{
+                if((B == true) & lugar(1)){
+                    !add_task(task(3000, "TASK_GOTO_POSITION2", ME, pos(X1-1, Y1, Z1), "INT"));
+                    -+lugar(0);
+                }
             }
         }.
 /////////////////////////////////
@@ -322,20 +338,21 @@ patrollingRadius(64).
 //  EXTRA
 /////////////////////////////////
 
-+formar1(X,Y,Z)[source(A)] 
++formar1(X,Y,Z,Squad)[source(A)]
 <-  
-	-formar1(_,_,_);
+	-formar1(_,_,_,_);
+    -+who(Squad);
 	.println("RECIBIDO MENSAJE DE ",A);
 	!safe_pos(X,Y,Z);
 	?safe_pos(X1,Y1,Z1);
-	+mi_pos(X1,Y1,Z1);
+    +mi_pos(X1, Y1, Z1);
     !add_task(task(5000,"TASK_GOTO_POSITION",A,pos(X1,Y1,Z1),"INT"));
 	?tasks(TASKS);
 	.println(TASKS);
 	//.my_team("capitan_AXIS",Capitan);
-	//-+estoyformado(true);
-	//.concat("formado(true)")",Listo);
-	//.send_msg_with_conversation_id(Capitan,tell,Listo,"INT");
+			//-+estoyformado(true);
+			//.concat("formado(true)")",Listo);
+			//.send_msg_with_conversation_id(Capitan,tell,Listo,"INT");
 	-+estoyformado(true);		
     -+state(standing).
 
@@ -348,5 +365,6 @@ patrollingRadius(64).
    +estoyformado(false);
    .wait(2000);
    +lugar(0);
+   +who(0);
    -+tasks([]).
 
