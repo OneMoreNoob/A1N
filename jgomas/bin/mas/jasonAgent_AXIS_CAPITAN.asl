@@ -219,8 +219,8 @@ patrollingRadius(64).
         ?safe_pos(X1, Y1, Z1);
         ?estoyformado(B);
 		?objective(ObjectiveX,ObjectiveY,ObjectiveZ);
-		?initialflag(X,Y,Z);
-		if((X \== ObjectiveX) & (Z \== ObjectiveZ)){
+		?initialflag(A,B,C);
+		if((A \== ObjectiveX) & (C \== ObjectiveZ)){
 			 -+tasks([]);
 			 -+lugar(20);
 			 .println("a ver; ", X, Z);

@@ -213,8 +213,8 @@ patrollingRadius(64).
         ?estoyformado(B);
 		
         ?objective(ObjectiveX,ObjectiveY,ObjectiveZ);
-		?initialflag(X,Y,Z);
-		if((X \== ObjectiveX) & (Z \== ObjectiveZ)){
+		?initialflag(A,B,C);
+		if((A \== ObjectiveX) & (C \== ObjectiveZ)){
 			 -+lugar(20);
 			  -+who(20);
 			 -+tasks([]);
