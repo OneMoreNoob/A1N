@@ -218,6 +218,14 @@ patrollingRadius(64).
         !safe_pos(X, Y, Z);
         ?safe_pos(X1, Y1, Z1);
         ?estoyformado(B);
+		?objective(ObjectiveX,ObjectiveY,ObjectiveZ);
+		?initialflag(X,Y,Z);
+		if((X \== ObjectiveX) & (Z \== ObjectiveZ)){
+			 -+tasks([]);
+			 -+lugar(20);
+			 .println("a ver; ", X, Z);
+			 !add_task(task(8000, "TASK_ATTACK", ME, pos(X, Y, Z), "INT"));
+		}
         if((B == true) & lugar(0)) {
             !add_task(task(3000, "TASK_GOTO_POSITION1", ME, pos(X1, Y1, Z1+1), "INT"));
             -+lugar(1);
@@ -394,6 +402,8 @@ patrollingRadius(64).
    +numformados(0);
    +boolformado(false);
    +estoyformado(false);
+   ?objective(ObjectiveX,ObjectiveY,ObjectiveZ);
+   +initialflag(ObjectiveX,ObjectiveY,ObjectiveZ);
    +plan(0);
    +lugar(0);
    !formar1("medic_AXIS","fieldops_AXIS","backup_AXIS").

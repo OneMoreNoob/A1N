@@ -208,7 +208,16 @@ patrollingRadius(64).
         !safe_pos(X, Y, Z);
         ?safe_pos(X1, Y1, Z1);
         ?estoyformado(B);
-        
+		
+        ?objective(ObjectiveX,ObjectiveY,ObjectiveZ);
+		?initialflag(X,Y,Z);
+		if((X \== ObjectiveX) & (Z \== ObjectiveZ)){
+			 -+lugar(20);
+			  -+who(20);
+			 -+tasks([]);
+			 !add_task(task(8000, "TASK_ATTACK", ME, pos(X, Y, Z), "INT"));
+		}
+		
         if(who(1)){
             if((B == true) & lugar(0)) {
                 !add_task(task(3000, "TASK_GOTO_POSITION1", ME, pos(X1, Y1, Z1+1), "INT"));
@@ -364,6 +373,8 @@ patrollingRadius(64).
    <- ?debug(Mode); if (Mode<=1) { .println("YOUR CODE FOR init GOES HERE.")};
    +estoyformado(false);
    .wait(2000);
+   ?objective(ObjectiveX,ObjectiveY,ObjectiveZ);
+   +initialflag(ObjectiveX,ObjectiveY,ObjectiveZ);
    +lugar(0);
    +who(0);
    -+tasks([]).
