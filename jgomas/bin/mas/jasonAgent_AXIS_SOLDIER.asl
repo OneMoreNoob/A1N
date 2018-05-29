@@ -128,13 +128,14 @@ patrollingRadius(64).
         .nth(1, AimedAgent, AimedAgentTeam);
         ?debug(Mode); if (Mode<=2) { .println("BAJO EL PUNTO DE MIRA TENGO A ALGUIEN DEL EQUIPO ", AimedAgentTeam); }
         ?my_formattedTeam(MyTeam);
-
+		.my_name(M);
 
         if (AimedAgentTeam == 100) {
         
             .nth(6, AimedAgent, NewDestination);
             ?debug(Mode); if (Mode<=1) { .println("NUEVO DESTINO MARCADO: ", NewDestination); }
             //update_destination(NewDestination);
+			!add_task(task(8000, "TASK_ATTACK", M, NewDestination, "INT"));
         }
         .
     
