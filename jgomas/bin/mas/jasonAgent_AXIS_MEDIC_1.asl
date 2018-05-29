@@ -167,8 +167,13 @@ patrollingRadius(64).
  * <em> It's very useful to overload this plan. </em>
  *
  */
-+!perform_injury_action .
-///<- ?debug(Mode); if (Mode<=1) { .println("YOUR CODE FOR PERFORM_INJURY_ACTION GOES HERE.") }.
++!perform_injury_action 
+<-
+ .my_name(M);
+?my_position(X, Y, Z);
+ !add_task(task(4000, "TASK_GIVE_MEDICPACKS", M, pos(X, Y, Z), ""));
+ .println("me doy pack medico");
+.
 
 
 /////////////////////////////////
