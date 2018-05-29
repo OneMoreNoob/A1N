@@ -156,8 +156,13 @@ patrollingRadius(64).
  * <em> It's very useful to overload this plan. </em>
  *
  */
-+!perform_no_ammo_action .
-/// <- ?debug(Mode); if (Mode<=1) { .println("YOUR CODE FOR PERFORM_NO_AMMO_ACTION GOES HERE.") }.
++!perform_no_ammo_action 
+<-
+    .my_name(M);
+    ?my_position(X, Y, Z);
+    !add_task(task(8000, "TASK_GIVE_AMMOPACKS", M, pos(X, Y, Z), ""));
+    println("me doy pack de ammo");
+    .
 
 /**
  * Action to do when an agent is being shot.
