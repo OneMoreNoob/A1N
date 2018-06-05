@@ -44,53 +44,84 @@ patrollingRadius(64).
     <-  ?debug(Mode); if (Mode<=2) { .println("Looking for agents to aim."); }
         ?fovObjects(FOVObjects);
         .length(FOVObjects, Length);
-        
+
         ?debug(Mode); if (Mode<=1) { .println("El numero de objetos es:", Length); }
-        
+
         if (Length > 0) {
-		    +bucle(0);
-    
+            +bucle(0);
+
             -+aimed("false");
-    
+
             while (aimed("false") & bucle(X) & (X < Length)) {
-  
+
                 //.println("En el bucle, y X vale:", X);
-                
+
                 .nth(X, FOVObjects, Object);
-                // Object structure 
+                // Object structure
                 // [#, TEAM, TYPE, ANGLE, DISTANCE, HEALTH, POSITION ]
                 .nth(2, Object, Type);
-                
+
                 ?debug(Mode); if (Mode<=2) { .println("Objeto Analizado: ", Object); }
-                
+
                 if (Type > 1000) {
                     ?debug(Mode); if (Mode<=2) { .println("I found some object."); }
                 } else {
                     // Object may be an enemy
                     .nth(1, Object, Team);
                     ?my_formattedTeam(MyTeam);
-          
-                    if (Team == 100) {  // Only if I'm AXIS
-				
- 					    ?debug(Mode); if (Mode<=2) { .println("Aiming an enemy. . .", MyTeam, " ", .number(MyTeam) , " ", Team, " ", .number(Team)); }
-					    +aimed_agent(Object);
-                        -+aimed("true");
 
-                    }
-                    
+                    if (Team == 100) {  // Only if I'm AXIS
+
+                        ?debug(Mode); if (Mode<=2) { .println("Aiming an enemy. . .", MyTeam, " ", .number(MyTeam) , " ", Team, " ", .number(Team)); }
+                        +aimed_agent(Object);
+                        -+aimed("true");
+			
+						//Fuego amigo
+                        +ffloop(0);
+					while(aimed("true") & ffloop(I) & (I < Length)){
+
+						.nth(I, FOVObjects, ObjectI);
+						.nth(2, ObjectI, TypeI);
+						.nth(1, ObjectI, TeamI);
+					
+						if (TypeI<1000 & TeamI==200){
+					
+							?my_position(XMe, YMe, ZMe);
+						
+							.nth(6,Object,PosEnemy);
+							.nth(6,ObjectI,PosTeammate);
+						
+							!distance(pos(XMe,YMe,ZMe),PosEnemy);
+							?distance(DE);
+							!distance(pos(XMe,YMe,ZMe),PosTeammate);
+							?distance(DT);
+						
+							!distance(PosTeammate,PosEnemy);
+							?distance(DTtoE);
+						
+							if(DE+3>=DT+DTtoE){
+ 								-aimed_agent(Object);
+ 								-+aimed("false");	
+							}
+						}
+						-+ffloop(I+1);             
+ 				
+					}
+					-ffloop(_);
+				
                 }
-             
-                -+bucle(X+1);
-                
+
             }
-                     
-       
+
+                -+bucle(X+1);
+
         }
 
-     -bucle(_).
 
-        
+    }
 
+    -bucle(_).
+	
 /////////////////////////////////
 //  LOOK RESPONSE
 /////////////////////////////////
@@ -361,10 +392,6 @@ patrollingRadius(64).
     !add_task(task(5000,"TASK_GOTO_POSITION",A,pos(X1,Y1,Z1),"INT"));
 	?tasks(TASKS);
 	.println(TASKS);
-	//.my_team("capitan_AXIS",Capitan);
-			//-+estoyformado(true);
-			//.concat("formado(true)")",Listo);
-			//.send_msg_with_conversation_id(Capitan,tell,Listo,"INT");
 	-+estoyformado(true);		
     -+state(standing).
 

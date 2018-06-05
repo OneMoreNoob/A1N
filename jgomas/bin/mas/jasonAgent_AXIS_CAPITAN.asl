@@ -76,50 +76,51 @@ patrollingRadius(64).
                         +aimed_agent(Object);
                         -+aimed("true");
 			
-			//Fuego amigo
+						//Fuego amigo
                         +ffloop(0);
-			while(aimed("true") & ffloop(I) & (I < Length)){
+					while(aimed("true") & ffloop(I) & (I < Length)){
 
- 					.nth(I, FOVObjects, ObjectI);
- 					.nth(2, ObjectI, TypeI);
- 					.nth(1, ObjectI, TeamI);
+						.nth(I, FOVObjects, ObjectI);
+						.nth(2, ObjectI, TypeI);
+						.nth(1, ObjectI, TeamI);
 					
- 					if (TypeI<1000 & TeamI==200){
+						if (TypeI<1000 & TeamI==200){
 					
- 						?my_position(XMe, YMe, ZMe);
+							?my_position(XMe, YMe, ZMe);
 						
- 						.nth(6,Object,PosEnemy);
- 						.nth(6,ObjectI,PosTeammate);
+							.nth(6,Object,PosEnemy);
+							.nth(6,ObjectI,PosTeammate);
 						
- 						!distance(pos(XMe,YMe,ZMe),PosEnemy);
- 						?distance(DE);
-						!distance(pos(XMe,YMe,ZMe),PosTeammate);
- 						?distance(DT);
+							!distance(pos(XMe,YMe,ZMe),PosEnemy);
+							?distance(DE);
+							!distance(pos(XMe,YMe,ZMe),PosTeammate);
+							?distance(DT);
 						
- 						!distance(PosTeammate,PosEnemy);
- 						?distance(DTtoE);
+							!distance(PosTeammate,PosEnemy);
+							?distance(DTtoE);
 						
- 						if(DE+3>=DT+DTtoE){
+							if(DE+3>=DT+DTtoE){
  								-aimed_agent(Object);
  								-+aimed("false");	
- 						}
- 					}
- 					-+ffloop(I+1);             
+							}
+						}
+						-+ffloop(I+1);             
  				
- 				}
- 				-ffloop(_);
-                    }
-
+					}
+					-ffloop(_);
+				
                 }
-
-                -+bucle(X+1);
 
             }
 
+                -+bucle(X+1);
 
         }
 
-     -bucle(_).
+
+    }
+
+    -bucle(_).
 
 
 
@@ -239,13 +240,6 @@ patrollingRadius(64).
  */
 +!update_targets
 	<- ?debug(Mode); if (Mode<=1) { .println("YOUR CODE FOR update_targets GOES HERE.")};
-        //?numformados(N);
-        //?boolformado(B);
-        //?plan(P);
-        //if(P==1){
-        //!formar2("medic_1_AXIS","fieldops_1_AXIS");
-        //}
-        //-+boolformado(true);
         .my_name(ME);
         ?mi_pos(X, Y, Z);
         !safe_pos(X, Y, Z);
