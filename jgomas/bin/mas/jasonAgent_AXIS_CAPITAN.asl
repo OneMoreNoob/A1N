@@ -75,7 +75,39 @@ patrollingRadius(64).
                         ?debug(Mode); if (Mode<=2) { .println("Aiming an enemy. . .", MyTeam, " ", .number(MyTeam) , " ", Team, " ", .number(Team)); }
                         +aimed_agent(Object);
                         -+aimed("true");
+			
+			//Fuego amigo
+                        +ffloop(0);
+			while(aimed("true") & ffloop(I) & (I < Length)){
 
+ 					.nth(I, FOVObjects, ObjectI);
+ 					.nth(2, ObjectI, TypeI);
+ 					.nth(1, ObjectI, TeamI);
+					
+ 					if (TypeI<1000 & TeamI==200){
+					
+ 						?my_position(XMe, YMe, ZMe);
+						
+ 						.nth(6,Object,PosEnemy);
+ 						.nth(6,ObjectI,PosTeammate);
+						
+ 						!distance(pos(XMe,YMe,ZMe),PosEnemy);
+ 						?distance(DE);
+						!distance(pos(XMe,YMe,ZMe),PosTeammate);
+ 						?distance(DT);
+						
+ 						!distance(PosTeammate,PosEnemy);
+ 						?distance(DTtoE);
+						
+ 						if(DE+3>=DT+DTtoE){
+ 								-aimed_agent(Object);
+ 								-+aimed("false");	
+ 						}
+ 					}
+ 					-+ffloop(I+1);             
+ 				
+ 				}
+ 				-ffloop(_);
                     }
 
                 }
